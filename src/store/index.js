@@ -2,9 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+import {account} from '../store/account/module'
 
 Vue.use(Vuex)
+
 const BASE_URL = 'http://localhost:4000'
+
  const site = {
   namespaced: true,
   state: {
@@ -81,5 +84,6 @@ const BASE_URL = 'http://localhost:4000'
   }
 }
 export default new Vuex.Store({modules:{
-  site
+  site,
+  account
 }})

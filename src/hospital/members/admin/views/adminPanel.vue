@@ -86,7 +86,7 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteItem(item)" color="red"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data> No Slots Found! </template>
     </v-data-table>
@@ -119,8 +119,8 @@ import { API_URL } from '@/constants';
         { text: 'Slot No', value: 'index', sortable: false },
         { text: 'Capacity', value: 'capacity', sortable: false },
         { text: 'Department', value: 'department', sortable: false },
-        { text: 'Scheduled Date', value: 'scheduleDate', sortable: false },
-        { text: 'Start Time', value: 'startTime', sortable: false },
+        { text: 'Scheduled Date', value: 'scheduleDate', sortable: true },
+        { text: 'Start Time', value: 'startTime', sortable: true },
         { text: 'End Time', value: 'endTime', sortable: false },
         { text: '', value: 'actions', sortable: false },
       ],
@@ -150,7 +150,7 @@ import { API_URL } from '@/constants';
     }),
 
     computed: {
-      ...mapGetters('site',['getUserId','getToken']),
+      ...mapGetters('site',['getUserId', 'getToken']),
       formTitle () {
         return this.editedIndex === -1 ? 'New Slot' : 'Edit Slot'
       },
@@ -172,15 +172,12 @@ import { API_URL } from '@/constants';
       'getSlotsData.department' (newVal, oldVal) {
         if(oldVal) this.clearTable()
         if (newVal && this.getSlotsData.date) {
-          console.log(this.getSlotsData)
           this.getSlots(this.getSlotsData.date, newVal)
         }
       },
       'getSlotsData.date' (newVal, oldVal) {
-        console.log(newVal, oldVal)
         if(oldVal) this.clearTable()
         if (newVal && this.getSlotsData.department) {
-          console.log(this.getSlotsData)
           this.getSlots(newVal, this.getSlotsData.department)
         }
       }
@@ -193,7 +190,6 @@ import { API_URL } from '@/constants';
     methods: {
       async initialize () {
         await axios.get(API_URL + '/departments').then((res) => {
-      console.log(res)
       this.departments = res.data.departments
       this.departments.forEach((department) => {
         this.departmentMenuItems.push(department.name)
@@ -215,10 +211,11 @@ import { API_URL } from '@/constants';
     console.log(data)
 
     data.forEach((slot) => {
+      let Department = this.departments.find(o => o._id == slot.department)
       let slotItem = {
         id: slot._id,
-        department: slot.department,
-        scheduleDate: slot.scheduleDate,
+        department: Department.name,
+        scheduleDate: moment(slot.scheduleDate).format('YYYY-MM-DD'),
         capacity: slot.capacity,
         startTime: moment(slot.startTime).format("hh:mm a"),
         endTime: moment(slot.endTime).format("hh:mm a")
@@ -318,7 +315,6 @@ import { API_URL } from '@/constants';
 
 .v-card{
   padding:10px;
-
 }
 .v-card__title {
   padding:10px;
@@ -327,7 +323,7 @@ import { API_URL } from '@/constants';
 .page-heading{
   padding:20px;
   text-align: left;
-  font-size: 24px!important;
+  font-size: 1.25rem !important;
 }
 .admin-container{
   width: 1000px;

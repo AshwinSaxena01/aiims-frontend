@@ -1,7 +1,7 @@
 <template>
     <nav>
       <v-toolbar>
-        <v-app-bar-nav-icon @click="drawer = !drawer" class="grey--text"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-if="getUserLoginFlag" @click="drawer = !drawer" class="grey--text"></v-app-bar-nav-icon>
         <v-toolbar-title class="text-uppercase grey--text">
         </v-toolbar-title>
         <v-spacer></v-spacer>
@@ -9,7 +9,7 @@
         <login-button v-else-if="!isLoginPage"></login-button>
       </v-toolbar>
   
-      <v-navigation-drawer app dark v-model="drawer" class="primary">
+      <v-navigation-drawer app dark v-model="drawer" v-if="getUserLoginFlag" class="primary">
         <v-list-item  class = "app-logo">
           <v-list-item-content>
             <v-list-item-title>
@@ -80,7 +80,7 @@ export default {
     },
     computed: {
       ...mapState('site',['isLoggedIn','token']),
-      ...mapGetters('site',['getUserRole','getToken']),
+      ...mapGetters('site',['getUserRole','getToken', 'getUserLoginFlag']),
     role () {
       return this.getUserRole
     },

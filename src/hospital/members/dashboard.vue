@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import admin from './admin/admin.vue'
 
@@ -20,11 +20,17 @@ export default {
         return {
         }
     },
+    async created () {
+      await this.getAllDepartments()
+    },
     computed: {
     ...mapGetters('site',['getUserRole','getToken']),
     role () {
       return this.getUserRole
     }
+  },
+  methods: {
+    ...mapActions('account', ['getAllDepartments'] )
   }
 }
 </script>

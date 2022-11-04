@@ -10,6 +10,7 @@
 
 <script>
 import { RouterLink } from 'vue-router';
+import { mapGetters } from 'vuex';
 import Navbar from './components/Navbar.vue'
 
 export default {

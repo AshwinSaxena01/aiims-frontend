@@ -1,5 +1,12 @@
 <template>
     <div>
+      
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success"
+      outlined
+    > Slot created successfully </v-snackbar>
             <v-form class="form" :key="formKey">
           <v-col cols="12" sm="6" md="3">
             <v-select
@@ -9,7 +16,6 @@
               label="Department"
               dense
             required
-            multiple
             outlined
             ></v-select>
           </v-col>
@@ -142,6 +148,8 @@
         
       },
       data: () => ({
+        snackbar: false,
+        timeout: 2000,
         editedItem: {
         department: '',
         capacity: '',
@@ -200,6 +208,7 @@
           }).then((res)=>{
             this.editedItem = this.defaultItem
               this.formKey++
+              this.snackbar = true
               console.log(res)
           })
           

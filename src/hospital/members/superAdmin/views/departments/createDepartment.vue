@@ -1,14 +1,14 @@
 <template>
     <div>
         <v-container>
-          <v-row justify="center">
+          <v-row>
             <v-col
               cols="8"
               sm="4"
             >
-                  <p>Create Department: </p>
                   <v-form ref="form">
                     <v-text-field
+                    dense
                 single-line
                 outlined
                 label="Department"
@@ -18,10 +18,15 @@
                 >
             </v-text-field>
                   </v-form>
+                </v-col>
+                  <v-col
+              cols="8"
+              sm="4"
+            >
                   <v-btn color="info" :large="$vuetify.breakpoint.smAndUp" @click="handleCreateAccount">
                     Create Department
                   </v-btn>
-        </v-col>
+                  </v-col>
           </v-row>
         </v-container>
     </div>
@@ -56,7 +61,7 @@
                 if (this.validate()) {
                     let reqBody = {
                         "data": {
-                            "username": this.department
+                            "name": this.department
                         }}
                         let url = 'http://localhost:4000/superAdmin/' + this.userId + '/department'
                     
@@ -66,12 +71,12 @@
           headers: {
             Authorization: "Bearer " + this.getToken
           },
-          data:{
-            reqBody
-          }
+          data: reqBody
+        
         }).then((res)=>{
-            console.log(res)
-        })
+          this.$emit('deptCreated')
+        }).catch((e) => console.log(e)
+        )
                         
         }
     }   
