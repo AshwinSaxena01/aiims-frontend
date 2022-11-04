@@ -4,13 +4,13 @@
 <div class="page-container">
   <v-col>
     <h1 class="title text-overline page-heading">MANAGE DEPARTMENTS</h1>
-    <v-card elevation="1" class="create-slots" min-width="344" min-height="200">
-      <v-card-title class="text-overline" >Create department :</v-card-title>
+    <v-card elevation="1" class="create-dept grey lighten-5" min-width="344" min-height="200">
+      <v-card-title class="text-overline blue lighten-5 mb-2" >Create department :</v-card-title>
     <create-department @deptCreated="refreshTable"></create-department>
     </v-card>
   </v-col>
   <v-col>
-    <v-card class="dept-table">
+    <v-card class="dept-table grey lighten-5">
     <v-card-title>
       <v-text-field
         v-model="search"
@@ -26,7 +26,7 @@
       :search="search"
     >
     <template v-slot:item.actions="{ item }">
-        <v-icon small @click="deleteItem(item)" color="red"> mdi-delete </v-icon>
+        <v-icon small @click="deleteItem(item)" color="red lighten-1"> mdi-delete </v-icon>
       </template> 
   </v-data-table>
   <v-dialog v-model="dialogDelete" max-width="500px">
@@ -137,7 +137,7 @@ import { API_URL } from '@/constants';
 }
 .v-card{
   padding:10px;
-
+  min-height: 100px !important;
 }
 .dept-table{
   max-width:600px;

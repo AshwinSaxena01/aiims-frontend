@@ -1,12 +1,12 @@
 <template>
   <div class="admin-container">
     <h1 class="text-overline page-heading">Dashboard</h1>
-    <v-card elevation="1" class="create-slots" min-width="344" min-height="200">
-      <v-card-title class="text-overline" >Create Slots :</v-card-title>
+    <v-card elevation="1" class="create-slots grey lighten-5" min-width="344" min-height="200">
+      <v-card-title class="text-overline blue lighten-5" >Create Slots :</v-card-title>
       <create-slot :departmentNames="departmentMenuItems" :departments="departments" ></create-slot>
     </v-card>
-    <v-card elevation="1">
-    <v-card-title class="text-overline">View Slots :</v-card-title>
+    <v-card elevation="1" class="grey lighten-5">
+    <v-card-title class="text-overline blue lighten-5">View Slots :</v-card-title>
     <v-data-table
       :headers="headers"
       :items="slotsData"
@@ -14,7 +14,7 @@
       class="elevation-0"
     >
       <template v-slot:top>
-        <v-toolbar elevation="0">
+        <v-toolbar elevation="0" >
           <span class="text-overline" >Select Date and Department: </span>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-col cols="12" sm="6" md="3">
@@ -86,7 +86,7 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)" color="red"> mdi-delete </v-icon>
+        <v-icon small @click="deleteItem(item)" color="red lighten-1"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data> No Slots Found! </template>
     </v-data-table>
@@ -315,6 +315,7 @@ import { API_URL } from '@/constants';
 
 .v-card{
   padding:10px;
+  margin: 20px;
 }
 .v-card__title {
   padding:10px;

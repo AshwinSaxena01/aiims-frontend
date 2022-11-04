@@ -1,10 +1,10 @@
 <template>
     <div>
         <v-container>
-          <v-row>
+          <v-row justify="start">
             <v-col
               cols="8"
-              sm="4"
+              sm="6"
             >
                   <v-form ref="form">
                     <v-text-field
@@ -23,7 +23,7 @@
               cols="8"
               sm="4"
             >
-                  <v-btn color="info" :large="$vuetify.breakpoint.smAndUp" @click="handleCreateAccount">
+                  <v-btn color="blue lighten-2" :large="$vuetify.breakpoint.smAndUp" @click="handleCreateAccount">
                     Create Department
                   </v-btn>
                   </v-col>

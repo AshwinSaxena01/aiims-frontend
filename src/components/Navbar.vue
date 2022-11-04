@@ -9,7 +9,7 @@
         <login-button v-else-if="!isLoginPage"></login-button>
       </v-toolbar>
   
-      <v-navigation-drawer app dark v-model="drawer" v-if="getUserLoginFlag" class="primary">
+      <v-navigation-drawer app dark v-model="drawer" v-if="getUserLoginFlag" class="blue lighten-1" width="240">
         <v-list-item  class = "app-logo">
           <v-list-item-content>
             <v-list-item-title>
