@@ -1,320 +1,110 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="slotsData"
-    sort-by="capacity"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar
-        elevation="0"
-      >
-        
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-        <v-dialog
-          v-model="dialog"
-          max-width="800px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-            >
-              create Slot
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-            <v-select
+  <div class="admin-container">
+    <h1 class="text-overline page-heading">Dashboard</h1>
+    <v-card elevation="1" class="create-slots" min-width="344" min-height="200">
+      <v-card-title class="text-overline" >Create Slots :</v-card-title>
+      <create-slot :departmentNames="departmentMenuItems" :departments="departments" ></create-slot>
+    </v-card>
+    <v-card elevation="1">
+    <v-card-title class="text-overline">View Slots :</v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="slotsData"
+      sort-by="capacity"
+      class="elevation-0"
+    >
+      <template v-slot:top>
+        <v-toolbar elevation="0">
+          <span class="text-overline" >Select Date and Department: </span>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-col cols="12" sm="6" md="3">
+          <v-select
             v-model="getSlotsData.department"
             :items="departmentMenuItems"
+            class="departments"
             label="Department"
+            dense
             required
-            chips
+            multiple
+            outlined
           ></v-select>
-          <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+          </v-col>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-col cols="12" sm="6" md="2">
           <v-menu
-        ref="getSlotsMenu"
-        v-model="getSlotsMenu"
-        :close-on-content-click="false"
-        :return-value.sync="getSlotsData.date"
-        transition="scale-transition"
-        offset-y
-        min-width="auto"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="getSlotsData.date"
-            label="Date"
-            prepend-icon="mdi-calendar"
-            readonly
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <v-date-picker
-          v-model="getSlotsData.date"
-          no-title
-          scrollable
-        >
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            color="primary"
-            @click="getSlotsMenu = false"
+            ref="getSlotsMenu"
+            v-model="getSlotsMenu"
+            :close-on-content-click="false"
+            :return-value.sync="getSlotsData.date"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
           >
-            Cancel
-          </v-btn>
-          <v-btn
-            text
-            color="primary"
-            @click="$refs.getSlotsMenu.save(getSlotsData.date)"
-          >
-            OK
-          </v-btn>
-        </v-date-picker>
-      </v-menu>
-      <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-        <span>Select Date and Department: </span>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-select v-if="!editing"
-            v-model="editedItem.department"
-            :items="departmentMenuItems"
-            :rules="[(v) => !!v || 'Item is required']"
-            label="Department"
-            required
-            chips
-          ></v-select>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.capacity"
-                      :rules="[(v) => !!v || 'capacity is required']"
-                      label="Capacity"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                  <v-menu
-                  v-if="!editing"
-        ref="menu"
-        v-model="menu"
-        :close-on-content-click="false"
-        :return-value.sync="date"
-        transition="scale-transition"
-        offset-y
-        min-width="auto"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="editedItem.date"
-            label="Date"
-
-            readonly
-            v-bind="attrs"
-            v-on="on"
-            filled
-          ></v-text-field>
-        </template>
-        <v-date-picker
-          v-model="editedItem.date"
-          no-title
-          scrollable
-          :allowed-dates="allowedDates"
-        >
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            color="primary"
-            @click="menu = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            text
-            color="primary"
-            @click="$refs.menu.save(date)"
-          >
-            OK
-          </v-btn>
-        </v-date-picker>
-      </v-menu>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  ></v-col>
-                  <v-menu
-                  v-if="!editing"
-        ref="startMenu"
-        v-model="startTimeMenu"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        :return-value.sync="editedItem.startTime"
-        transition="scale-transition"
-        offset-y
-        max-width="290px"
-        min-width="290px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="newStartTime"
-            label="Start Time"
-            prepend-icon="mdi-clock-time-four-outline"
-            :rules="[(v) => !!v || 'Start time is required']"
-            readonly
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <v-time-picker
-        ref="startTimePicker"
-        ampm-in-title
-        flat
-        width="200"
-          v-model="editedItem.startTime"
-          @click:minute="saveTime()"
-        ></v-time-picker>
-      </v-menu>
-      <v-menu
-      v-if="!editing"
-        ref="endMenu"
-        v-model="endTimeMenu"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        :return-value.sync="editedItem.endTime"
-        transition="scale-transition"
-        offset-y
-        max-width="290px"
-        min-width="290px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="newEndTime"
-            label="End Time"
-            prepend-icon="mdi-clock-time-four-outline"
-            :rules="[(v) => !!v || 'End time is required']"
-            readonly
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <v-time-picker
-        ref="endTimePicker"
-        width="200"
-          v-model="editedItem.endTime"
-          :min="editedItem.startTime"
-          @click:minute="$refs.endMenu.save(editedItem.endTime)"
-        ></v-time-picker>
-        </v-menu>
-
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="getSlotsData.date"
+                label="Date"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="getSlotsData.date" no-title scrollable>
               <v-spacer></v-spacer>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="close"
-              >
+              <v-btn text color="primary" @click="getSlotsMenu = false">
                 Cancel
               </v-btn>
               <v-btn
-                color="blue darken-1"
                 text
-                @click="save"
+                color="primary"
+                @click="$refs.getSlotsMenu.save(getSlotsData.date)"
               >
-                Save
+                OK
               </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
-    </template>
-    <template v-slot:no-data>
-        No Slots Created!
-    </template>
-  </v-data-table>
+            </v-date-picker>
+          </v-menu>
+          </v-col>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card>
+              <v-card-title class="text-h5"
+                >Are you sure you want to delete this item?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeDelete"
+                  >Cancel</v-btn
+                >
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                  >OK</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      </template>
+      <template v-slot:no-data> No Slots Found! </template>
+    </v-data-table>
+  </v-card>
+  </div>
 </template>
-  <script>
 
-  import DatePicker from 'vue2-datepicker';
-  import moment from 'moment';
-  import axios from 'axios'
+  <script>
+import createSlot from './createSlot.vue';
+import moment from 'moment';
+import axios from 'axios'
 import { mapGetters } from 'vuex';
-    const API_URL = `http://localhost:4000`
+import { API_URL } from '@/constants';
 
   export default {
     department: "adminPanel",
     components: {
-      DatePicker
+      createSlot
     },
     data: () => ({
       dialog: false,
@@ -326,8 +116,10 @@ import { mapGetters } from 'vuex';
         date: ''
       },
       headers: [
-      { text: '', value: 'id' },
-        { text: 'Capacity', value: 'capacity' },
+        { text: 'Slot No', value: 'index', sortable: false },
+        { text: 'Capacity', value: 'capacity', sortable: false },
+        { text: 'Department', value: 'department', sortable: false },
+        { text: 'Scheduled Date', value: 'scheduleDate', sortable: false },
         { text: 'Start Time', value: 'startTime', sortable: false },
         { text: 'End Time', value: 'endTime', sortable: false },
         { text: '', value: 'actions', sortable: false },
@@ -425,6 +217,8 @@ import { mapGetters } from 'vuex';
     data.forEach((slot) => {
       let slotItem = {
         id: slot._id,
+        department: slot.department,
+        scheduleDate: slot.scheduleDate,
         capacity: slot.capacity,
         startTime: moment(slot.startTime).format("hh:mm a"),
         endTime: moment(slot.endTime).format("hh:mm a")
@@ -497,7 +291,6 @@ import { mapGetters } from 'vuex';
             'data': reqData
           })
 
-          moment.defaultFormat
           await axios.request({
             url: url,
             method: "POST",
@@ -514,27 +307,38 @@ import { mapGetters } from 'vuex';
         }
         this.close()
       },
-      saveTime () {
-        this.$refs.startMenu.save(this.editedItem.startTime)
-      },
-      allowedDates (val) {
-      // let allowedDay = parseInt(val.split('-')[2])
-      // let today = parseInt(this.todayDate.split('-')[2])
-      return val >= this.todayDate
-    }
+      
     },
   };
   </script>
-  <style>
+  <style scoped>
 .v-time-picker-clock__container {
   flex-basis: 0px !important;
 }
 
-.v-select.v-select--chips .v-select__selections {
-  min-height: 32px;
-  width: 40px;
+.v-card{
+  padding:10px;
+
 }
-.theme--light.v-toolbar.v-sheet {
-  height: 100px;
+.v-card__title {
+  padding:10px;
+  font-size: 14px!important;
 }
+.page-heading{
+  padding:20px;
+  text-align: left;
+  font-size: 24px!important;
+}
+.admin-container{
+  width: 1000px;
+  margin: auto;
+}
+.v-text-field--outlined.v-input--dense .v-label{
+  font-size:12px !important;
+}
+.departments{
+  top:10px
+}
+
+
 </style>
