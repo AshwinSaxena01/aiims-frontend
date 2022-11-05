@@ -24,7 +24,7 @@
           dense
           nav
         >
-        <v-list-item link v-if="role==='superAdmin'" @click="handleDashboard">
+        <v-list-item link v-if="role==='superAdmin' || role==='admin'" @click="handleDashboard">
           <v-list-item-icon>
             <v-icon>mdi-view-dashboard</v-icon>
           </v-list-item-icon>
