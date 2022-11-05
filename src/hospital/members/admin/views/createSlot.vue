@@ -169,22 +169,31 @@
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       startTimeMenu: false,
       endTimeMenu: false,
-      todayDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+      todayDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      newEndTime: '',
+      newStartTime: ''
 
       //
       }),
       computed: {
         ...mapGetters('site',['getUserId','getToken']),
-        newEndTime () {
-        if(this.editedItem.endTime) return this.editedItem.endTime + this.$refs.endTimePicker.period
-      },
-      newStartTime () {
-      if( this.editedItem.startTime ) return this.editedItem.startTime + this.$refs.startTimePicker.period
-    }
+    //     newEndTime () {
+    //     if(this.editedItem.endTime) return this.editedItem.endTime + this.$refs.endTimePicker.period
+    //   },
+    //   newStartTime () {
+    //   if( this.editedItem.startTime ) return this.editedItem.startTime + this.$refs.startTimePicker.period
+    // }
       },
       methods: {
         allowedDates (val) {
             return val >= this.todayDate
+        },
+        formattedStartTime () {
+          if(this.editedItem.startTime) this.newStartTime = this.editedItem.startTime + this.$refs.startTimePicker.period
+        },
+        formattedEndTime () {
+          if(this.editedItem.endTime) this.newEndTime = this.editedItem.endTime + this.$refs.endTimePicker.period
+
         },
         async saveSlot () {
           let url = API_URL + '/admin/' + this.getUserId + '/slot'
@@ -206,7 +215,7 @@
             },
             data: reqBody
           }).then((res)=>{
-            this.editedItem = this.defaultItem
+            //
               this.formKey++
               this.snackbar = true
               this.$refs.form.reset()
@@ -215,6 +224,14 @@
           
       },
 
+      },
+      watch: {
+        'editedItem.endTime' () {
+          this.formattedEndTime()
+        },
+        'editedItem.startTime' () {
+          this.formattedStartTime()
+        }
       }
       
   };
