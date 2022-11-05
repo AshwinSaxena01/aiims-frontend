@@ -1,8 +1,9 @@
 
 <template>
-  <v-app>
-    <h1>Patient Registration</h1> 
+  
+    
   <v-container>
+    <h1 class="heading">Patient Registration</h1> 
     <v-row justify="center">
       <v-col
       cols="12"
@@ -18,6 +19,7 @@
             label="Department"
             required
             filled
+            dense
             offset-y
           ></v-select>
       <v-menu
@@ -31,6 +33,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
+          dense
             v-model="date"
             label="Date"
             prepend-icon="mdi-calendar"
@@ -64,12 +67,16 @@
         </v-date-picker>
       </v-menu>
     <div style="text-align: left;"> Select Time Slots: </div>
+    <div v-if="noSlots" style="padding: 10px"> {{noSlotsMessage}} </div>
     <v-chip-group
+    v-else
     v-model="selectedTimeSlot"
           mandatory
+          column
           active-class="primary--text"
         >
           <v-chip
+          dense
             v-for="tag in timeSlots"
             :key="tag"
           >
@@ -77,6 +84,7 @@
           </v-chip>
         </v-chip-group>
           <v-text-field
+          dense
             v-model="name"
             :rules="nameRules"
             label="Name"
@@ -84,6 +92,7 @@
             filled
           ></v-text-field>
           <v-text-field
+          dense
             v-model="uhid"
             label="UHID"
             :rules="[(v) => !!v || 'UHID is required']"
@@ -91,6 +100,7 @@
             filled
           ></v-text-field>
           <v-text-field
+          dense
             v-model="mobileNo"
             :rules="phoneRules"
             label="Mobile No."
@@ -98,23 +108,23 @@
             filled
           ></v-text-field>
           <v-text-field
+          dense
             v-model="email"
             :rules="emailRules"
-            label="E-mail"
+            label="E-mail (Optional)"
             required
             filled
           ></v-text-field>
-        <v-btn class="submitBtn" @click = "handleSubmit"> Book Now</v-btn>
+        <v-btn class="submitBtn primary" @click = "handleSubmit"> Book Now</v-btn>
         </v-form>
       </v-col>
     </v-row>
   </v-container>
-</v-app>
 </template>
 <script>
 import axios from 'axios'
 import moment from 'moment';
-const API_URL = `http://localhost:4000`
+import { API_URL } from '@/constants';
 
 export default {
   name: "UserForm",
@@ -140,7 +150,6 @@ export default {
     email: "",
     mobileNo: "",
     emailRules: [
-      (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
     phoneRules: [
@@ -159,7 +168,9 @@ export default {
       selectedTimeSlot: "",
       departments: [],
       startTime: [],
-      endTime: []
+      endTime: [],
+      noSlots: false,
+      noSlotsMessage: ''
   }),
 
   methods: {
@@ -168,16 +179,25 @@ export default {
     },
     async getSlots (date,departmentId) {
       const response = await axios.get(API_URL + `/slots?date=${date}&department=${departmentId}`).then((res)=>{
-      return res.data
+        let sortedSlots = res.data.slots.sort((a,b) => (a.startTime > b.startTime) ? 1 : ((b.startTime > a.startTime) ? -1 : 0))
+      return sortedSlots
+    }).catch((e) => {
+      console.log(e)
     })
     console.log(response)
-    this.printSlots(response.slots)
+    this.printSlots(response)
     
     },
     printSlots(slots) {
+      if(slots.length === 0) {
+        this.noSlotsMessage = 'No slots found for this date'
+        this.noSlots = true
+      }
       slots.forEach((slot)=>{
-        debugger
-        this.startTime.push(moment(slot.startTime).format("hh:mm a"))
+        let startTime = moment(slot.startTime).format("hh:mm a")
+        let endTime = moment(slot.endTime).format("hh:mm a")
+        let slotTime = startTime + ' - ' + endTime
+        this.timeSlots.push(slotTime)
       })
     },
     handleSubmit () {
@@ -194,8 +214,6 @@ export default {
       }
     },
     allowedDates (val) {
-      // let allowedDay = parseInt(val.split('-')[2])
-      // let today = parseInt(this.todayDate.split('-')[2])
       return val >= this.todayDate
     }
   },
@@ -204,15 +222,26 @@ export default {
       let department = this.departments.find(department => department.name == val)
       let departmentId = department._id
       this.getSlots(this.date, departmentId)
+    },
+    date (val) {
+      if(this.select) {
+        let department = this.departments.find(department => department.name == this.select)
+      let departmentId = department._id
+        this.getSlots(this.date, departmentId)
+      }
     }
   }
 };
 </script>
-<style>
+<style scoped>
 .submitBtn {
   margin-top: 16px;
 }
 .v-chip-group .v-slide-group__content {
     padding: 12px
+}
+.heading{
+  margin: 15px;
+  text-align: center;
 }
 </style>

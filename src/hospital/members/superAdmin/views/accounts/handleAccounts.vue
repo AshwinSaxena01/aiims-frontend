@@ -1,32 +1,56 @@
-<template><div>
-  <h1 class="title">MANAGE ACCOUNTS</h1>
+<template>
+<div>
   <v-container>
-    <v-expansion-panels>
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          <div class="heading"> Create Account</div>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <create-account></create-account>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          <div class="heading"> Edit Account</div>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          Edit Account
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          <div class="heading"> Delete Account</div>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          Delete Account
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
+    <v-row>
+<div class="page-container">
+  <v-col>
+    <h1 class="title text-overline page-heading">MANAGE ACCOUNTS</h1>
+    <v-card elevation="1" class="create-dept grey lighten-5" min-width="344" min-height="200">
+      <v-card-title class="text-overline blue lighten-5 mb-2" >Create Account :</v-card-title>
+    <create-account></create-account>
+    </v-card>
+  </v-col>
+  <v-col>
+    <v-card class="dept-table grey lighten-5">
+    <v-card-title>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="departments"
+      :search="search"
+    >
+    <template v-slot:item.actions="{ item }">
+        <v-icon small @click="deleteItem(item)" color="red lighten-1"> mdi-delete </v-icon>
+      </template> 
+  </v-data-table>
+  <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card>
+              <v-card-title class="text-h5"
+                >Are you sure you want to delete this item?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeDelete"
+                  >Cancel</v-btn
+                >
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                  >OK</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+  </v-card>
+</v-col>
+  </div>
+</v-row>
   </v-container>
   </div>
   </template>
@@ -40,13 +64,32 @@ import createAccount from './createAccount.vue';
   
   }
   </script>
-  <style>
-  .heading {
-    font-size: 16px;
-    text-align: center;
-  }
+  <style scoped>
+
   .title{
     text-align: center;
     padding: 20px;
   }
+  .page-heading{
+  padding:20px;
+  text-align: left;
+  font-size: 1.25rem !important;
+}
+.page-container{
+  width: 1000px;
+  margin: auto;
+}
+.v-card__title {
+  padding:10px;
+  font-size: 14px!important;
+}
+.v-card{
+  padding:10px;
+  min-height: 100px !important;
+}
+.dept-table{
+  max-width:600px;
+  margin-top:20px;
+  margin: auto;
+}
 </style>

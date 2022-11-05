@@ -6,9 +6,21 @@
           cols="8"
           sm="4"
         >
-              <p>Create Admin/Guard Account: </p>
+        <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success"
+      top
+    > Account created successfully </v-snackbar>
+    <v-snackbar
+      v-model="errorSnackbar"
+      :timeout="timeout"
+      color="error"
+      top
+    > Account could not be created </v-snackbar>
               <v-form ref="form">
                 <v-text-field
+                dense
                 single-line
                 outlined
                 label="Username"
@@ -18,6 +30,7 @@
                 >
             </v-text-field>
             <v-text-field
+            dense
                 single-line
                 outlined
                 label="Password"
@@ -28,6 +41,7 @@
             </v-text-field>
             
             <v-select
+            dense
             v-model="role"
             outlined
           :items="items"
@@ -59,7 +73,10 @@ import { mapState, mapActions, mapGetters } from 'vuex';
       username: null,
       role: null,
       userId: null,
-      items: ['Admin','Guard' ]
+      items: ['Admin','Guard' ],
+      snackbar: false,
+      errorSnackbar: false,
+      timeout: 2000
     }
 },
 computed:{
@@ -91,7 +108,12 @@ computed:{
       data: reqBody
 
     }).then((res)=>{
+      this.snackbar = true
+      this.$refs.form.reset()
         console.log(res)
+    }).catch((e) => {
+      this.errorSnackbar = true;
+      console.log(e)
     })
                     
     }

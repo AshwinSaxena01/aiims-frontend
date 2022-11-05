@@ -10,7 +10,7 @@
     <v-data-table
       :headers="headers"
       :items="slotsData"
-      sort-by="capacity"
+      sort-by="startTime"
       class="elevation-0"
     >
       <template v-slot:top>
@@ -117,11 +117,12 @@ import { API_URL } from '@/constants';
       },
       headers: [
         { text: 'Slot No', value: 'index', sortable: false },
-        { text: 'Capacity', value: 'capacity', sortable: false },
         { text: 'Department', value: 'department', sortable: false },
         { text: 'Scheduled Date', value: 'scheduleDate', sortable: true },
         { text: 'Start Time', value: 'startTime', sortable: true },
         { text: 'End Time', value: 'endTime', sortable: false },
+        { text: 'Capacity', value: 'capacity', sortable: false },
+        { text: 'Registrations', value: 'registrations', sortable: false },
         { text: '', value: 'actions', sortable: false },
       ],
       slotsData: [],
@@ -218,7 +219,8 @@ import { API_URL } from '@/constants';
         scheduleDate: moment(slot.scheduleDate).format('YYYY-MM-DD'),
         capacity: slot.capacity,
         startTime: moment(slot.startTime).format("hh:mm a"),
-        endTime: moment(slot.endTime).format("hh:mm a")
+        endTime: moment(slot.endTime).format("hh:mm a"),
+        registrations: slot.registrations.length
       }
       this.slotsData.push(slotItem)
     } )

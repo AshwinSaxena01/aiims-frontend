@@ -5,9 +5,9 @@
       v-model="snackbar"
       :timeout="timeout"
       color="success"
-      outlined
+      top
     > Slot created successfully </v-snackbar>
-            <v-form class="form mt-4" :key="formKey">
+            <v-form class="form mt-4" ref="form" :key="formKey">
           <v-col cols="12" sm="6" md="3">
             <v-select
               v-model="editedItem.department"
@@ -209,6 +209,7 @@
             this.editedItem = this.defaultItem
               this.formKey++
               this.snackbar = true
+              this.$refs.form.reset()
               console.log(res)
           })
           

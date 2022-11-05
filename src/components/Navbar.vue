@@ -92,13 +92,13 @@ export default {
       ...mapMutations('site',['SET_TOKEN']),
       ...mapActions('site',['userState']),
     handleAccounts () {
-      this.$router.push('/dashboard/handleAccounts')
+      this.$router.push('/dashboard/handleAccounts').catch(err => {})
     },
     handleDepartments () {
-      this.$router.push('/dashboard/handleDepartments')
+      this.$router.push('/dashboard/handleDepartments').catch(err => {})
     },
     handleDashboard () {
-      this.$router.push('/dashboard')
+      this.$router.push('/dashboard').catch(err => {})
     }
   
     }

@@ -6,6 +6,12 @@
               cols="8"
               sm="6"
             >
+            <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success"
+      top
+    > Slot created successfully </v-snackbar>
                   <v-form ref="form">
                     <v-text-field
                     dense
@@ -45,7 +51,9 @@
           darkTheme: true,
           department: null,
           userId: null,
-          items: ['Admin','Guard' ]
+          items: ['Admin','Guard' ],
+          snackbar: false,
+          timeout: 2000
         }
     },
     computed:{
@@ -75,6 +83,8 @@
         
         }).then((res)=>{
           this.$emit('deptCreated')
+          this.snackbar = true
+          this.$refs.form.reset()
         }).catch((e) => console.log(e)
         )
                         
