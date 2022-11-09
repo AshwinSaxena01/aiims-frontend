@@ -13,19 +13,29 @@
   <v-col>
     <v-card class="dept-table grey lighten-5">
     <v-card-title>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
+      
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="departments"
-      :search="search"
+      :items="accounts"
     >
+    <template v-slot:top>
+        <v-toolbar elevation="0" >
+          <span class="text-overline" >Select Role: </span>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-col cols="12" sm="6" md="3">
+          <v-select
+            v-model="role"
+            :items="roles"
+            class="roles"
+            label="Role"
+            dense
+            required
+            outlined
+          ></v-select>
+          </v-col>
+          </v-toolbar>
+    </template>
     <template v-slot:item.actions="{ item }">
         <v-icon small @click="deleteItem(item)" color="red lighten-1"> mdi-delete </v-icon>
       </template> 
@@ -55,11 +65,79 @@
   </div>
   </template>
   <script>
+import { mapActions, mapGetters } from 'vuex';
 import createAccount from './createAccount.vue';
+import { API_URL } from '@/constants';
+import axios from 'axios'
       export default {
           name: 'handleAccounts',
           components:{
             createAccount
+          },
+          data () {
+            return {
+              role: '',
+              roles: ['admin', 'guard'],
+              accounts: [],
+              headers: [ {
+            text: 'Accounts',
+            align: 'start',
+            filterable: true,
+            value: 'username',
+          },
+          { text: '', align:'end', value: 'actions', sortable: false }],
+          deleteItemId: '',
+          dialogDelete: false
+            }
+          },
+          computed:{
+            ...mapGetters('site', ['getUserId', 'getToken']),
+            ...mapGetters('account', ['getAccounts'])
+          },
+          methods: {
+            ...mapActions('account', ['getAccountsByRole','deleteAccount']),
+            async getRoleAccounts() {
+              let url = API_URL + '/superAdmin' + `/${this.getUserId}` + `/account?role=${this.role}`
+            let req = {
+            url: url,
+            method: "GET",
+            headers: {
+              'Authorization': "Bearer " + this.getToken,
+              'Content-Type': 'application/json'
+            }
+            }
+            await this.getAccountsByRole(req)
+            this.accounts = this.getAccounts
+          },
+        deleteItem (item) {
+        console.log(item)
+        this.deleteItemId = item._id
+        this.dialogDelete = true
+      },
+      
+      closeDelete () {
+        this.dialogDelete = false
+        
+      },
+      async deleteItemConfirm () {
+        let url = API_URL +'/superAdmin' + `/${this.getUserId}` + '/account' + `/${this.deleteItemId}`
+        let payload = {
+          url: url,
+          token: this.getToken
+        }
+        await this.deleteAccount(payload)
+        this.getRoleAccounts()
+        this.closeDelete()
+      },
+      
+          },
+          watch: {
+            role (val) {
+              if(val) {
+                this.accounts = []
+              }
+              this.getRoleAccounts()
+            }
           }
   
   }

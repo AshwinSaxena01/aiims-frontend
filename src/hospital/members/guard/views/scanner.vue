@@ -1,14 +1,31 @@
 <template>
     <div class="bg-gray-50 px-8">
       <p>{{ error }}</p>
-      <p>{{ decodedString }}</p>
       <button @click="torch=!torch">TURN ON/OFF FLASHLIGHT</button>
-      <qrcode-stream @init="onInit" @decode="onDecode" :torch="torch"></qrcode-stream>
+      <qrcode-stream v-if="!verified && !showError" @init="onInit" @decode="onDecode" :torch="torch"></qrcode-stream>
+      <v-card v-if="verified" color="green">
+        <v-card-text>
+          <p class="text-h4 text--primary">
+            Verified!
+          </p>
+          <span>Name: {{userDetails.name}}</span>
+          <span>UHID: {{userDetails.name}}</span>
+          <span>Date: {{slotDetails.scheduleDate}}</span>
+          <span>Slot Time: {{slotDetails.startTime}}</span>
+        </v-card-text>
+        
+      </v-card>
+      
+      <h1 v-if="showError"> Sorry, your slot time is invalid </h1>
     </div>
   </template>
   
   <script>
   import { QrcodeStream } from 'vue-qrcode-reader'
+  import axios from 'axios'
+import { mapGetters } from 'vuex'
+import { API_URL } from '@/constants'
+import moment from 'moment'
   export default {
     name: "scanner",
     data() {
@@ -16,10 +33,18 @@
         error: '',
         decodedString: '',
         torch: false,
+        verified: false,
+        showError: false,
+        slotDetails: [],
+        userDetails: []
       }
     },
     components: {
       QrcodeStream
+    },
+    computed: {
+      ...mapGetters('site', ['getToken','getUserId']
+      )
     },
     methods: {
       async onInit( promise ) {
@@ -48,9 +73,47 @@
         this.decodedString = decodedString;
         //window.location.replace(decodedString)
       },
-      verifyQR (decodedString) {
-        
+      async verifyQR (decodedString) {
+        console.log(decodedString.replaceAll('\"',''))
+            let reqBody = JSON.stringify({ 
+              data: {
+                registrationId: decodedString.replaceAll('\"','')
+            }
+          })
+
+          let url = API_URL + `/guard/${this.getUserId}` + '/verifyRegistration'
+          await axios.request({
+            url: url,
+            method: "POST",
+            headers: {
+              'Authorization': "Bearer " + this.getToken,
+              'Content-Type': 'application/json'
+            },
+            data: reqBody
+          }).then((res)=>{
+            this.verified = true
+            this.slotDetails = res.data.slot
+            this.slotDetails.startTime = moment(this.slotDetails.startTime).format('hh:mm A')
+            this.slotDetails.scheduleDate = moment(this.slotDetails.scheduleDate).format('YYYY-MM-DD')
+            this.userDetails = res.data.registration
+            console.log(res)
+          }).catch((e) => {
+            console.log(e)
+            this.showError = true
+          })
+      }
+    },
+    watch:{
+      decodedString (val) {
+        this.verifyQR(val)
       }
     }
   }
   </script>
+  <style scoped>
+.v-card__text{
+  display: flex;
+  flex-direction: column;
+}
+
+</style>

@@ -20,14 +20,6 @@
             ></v-select>
           </v-col>
           <v-col cols="12" sm="6" md="2">
-            <v-text-field
-              v-model="editedItem.capacity"
-              :rules="[(v) => !!v || 'capacity is required']"
-              label="Capacity"
-              dense
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" md="2">
             <v-menu
               ref="menu"
               v-model="menu"
@@ -126,6 +118,14 @@
             ></v-time-picker>
           </v-menu>
         </v-col>
+        <v-col cols="12" sm="6" md="2">
+            <v-text-field
+              v-model="editedItem.capacity"
+              :rules="[(v) => !!v || 'capacity is required']"
+              label="Capacity"
+              dense
+            ></v-text-field>
+          </v-col>
         <v-col cols="12" sm="6" md="10"></v-col>
           <v-col cols="12" sm="6" md="2">
             <v-btn color="blue lighten-2" @click="saveSlot"> Create </v-btn>

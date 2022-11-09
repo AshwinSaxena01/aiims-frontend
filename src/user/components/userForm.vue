@@ -217,6 +217,8 @@ export default {
         await this.register(reqBody).then(() => {
           this.$refs.form.reset()
           this.$emit('showQR', this.getDetails)
+          let id = this.getDetails._id
+          this.$router.push(`/user/ticket/${id}`)
         }).catch((e) => console.log(e))
       }
     },

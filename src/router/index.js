@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../home/HomeView.vue";
 import userView from "../user/user.vue";
+import userTicket from "../user/components/userTicket.vue"
 import loginView from "../hospital/login/login.vue"
 import dashboard from '../hospital/members/dashboard.vue'
 import handleAccounts from '../hospital/members/superAdmin/views/accounts/handleAccounts.vue'
@@ -26,6 +27,11 @@ const routes = [
     path: "/user",
     name: "user",
     component: userView
+  },
+  {
+    path: "/user/ticket/:id",
+    name: "userTicket",
+    component: userTicket
   },
   {
     path: "/login",

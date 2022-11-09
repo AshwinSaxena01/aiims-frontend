@@ -1,7 +1,7 @@
 <template>
     <v-container>
     <v-btn @click="showQRScanner"> Scan QR</v-btn>
-<scanner v-if="showScanner"></scanner>
+<scanner v-if="showScanner" :key="scannerKey"></scanner>
 </v-container>
 </template>
 
@@ -15,7 +15,8 @@ export default {
     },
     data () {
         return {
-            showScanner: false
+            showScanner: false,
+            scannerKey: 0
         }
     },
     computed: {
@@ -23,6 +24,7 @@ export default {
   methods: {
     showQRScanner () {
         this.showScanner = true
+        this.scannerKey++
     }
   }
 }

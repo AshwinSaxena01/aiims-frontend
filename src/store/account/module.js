@@ -4,17 +4,24 @@ import axios from "axios"
 export const account = {
     namespaced: true,
     state: {
-      departments: []
+      departments: [],
+      accounts: []
     },
     getters: {
       getDepartments(state) {
         return state.departments
+      },
+      getAccounts(state) {
+        return state.accounts
       },
       
     },
     mutations: {
       SET_DEPARTMENTS(state, departments) {
         state.departments = departments
+      },
+      SET_ACCOUNTS(state, accounts) {
+        state.accounts = accounts
       }
     },
     actions: {
@@ -35,6 +42,21 @@ export const account = {
               console.log(res)
               await dispatch('getAllDepartments')
           }).catch((e) => console.log(e))
+      },
+      async getAccountsByRole({commit}, req) {
+        await axios.request(req).then((res) => {
+          commit('SET_ACCOUNTS', res.data.accounts)
+        }).catch(e => console.log(e))
+      },
+      async deleteAccount({dispatch}, payload) {
+        let headers = {
+          'Authorization': "Bearer " + payload.token,
+          'Content-Type': 'application/json'
+        }
+    await axios.delete(payload.url,{headers}).then( async (res)=>{
+          console.log(res)
+
+      }).catch((e) => console.log(e))
       }
     }
   }

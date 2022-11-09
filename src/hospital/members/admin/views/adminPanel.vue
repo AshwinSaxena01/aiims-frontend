@@ -317,7 +317,6 @@ import { API_URL } from '@/constants';
 
 .v-card{
   padding:10px;
-  margin: 20px;
 }
 .v-card__title {
   padding:10px;
