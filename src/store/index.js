@@ -4,10 +4,9 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import {account} from '../store/account/module'
 import {user} from './user/module'
+import {API_URL} from '@/constants'
 
 Vue.use(Vuex)
-
-const BASE_URL = 'http://localhost:4000'
 
  const site = {
   namespaced: true,
@@ -62,7 +61,7 @@ const BASE_URL = 'http://localhost:4000'
   },
   actions: {
     async login({commit},req) {
-      await axios.post('http://localhost:4000/signin', req).then((res) => {
+      await axios.post(API_URL + '/signin', req).then((res) => {
                         console.log(res.data)
                         commit('SET_USER_NAME', res.data.account.username)
                         commit('SET_USER_ROLE', res.data.account.role)

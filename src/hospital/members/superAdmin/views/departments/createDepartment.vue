@@ -41,6 +41,7 @@
     <script>
     import axios from 'axios'
     import { mapState, mapActions, mapGetters } from 'vuex';
+    import { API_URL } from '@/constants';
         export default {
             name: 'createDepartment',
             created () {
@@ -71,7 +72,7 @@
                         "data": {
                             "name": this.department
                         }}
-                        let url = 'http://localhost:4000/superAdmin/' + this.userId + '/department'
+                        let url = API_URL + '/superAdmin/' + this.userId + '/department'
                     
                         await axios.request({
           url: url,

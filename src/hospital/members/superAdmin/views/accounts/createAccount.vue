@@ -61,6 +61,7 @@
 <script>
 import axios from 'axios'
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { API_URL } from '@/constants';
     export default {
         name: 'createAccount',
         created () {
@@ -96,7 +97,7 @@ computed:{
                         "password": this.password,
                         "role": this.role.toLowerCase()
                     }})
-                    let url = 'http://localhost:4000/superAdmin/' + this.userId + '/account'
+                    let url = API_URL + '/superAdmin/' + this.userId + '/account'
                 
                     await axios.request({
       url: url,
