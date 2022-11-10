@@ -93,7 +93,7 @@ import moment from 'moment'
             data: reqBody
           }).then((res)=>{
             this.verified = true
-            this.slotDetails = res.data.slot
+            this.slotDetails = res.data.registration.slot
             this.slotDetails.startTime = moment(this.slotDetails.startTime).format('hh:mm A')
             this.slotDetails.scheduleDate = moment(this.slotDetails.scheduleDate).format('YYYY-MM-DD')
             this.userDetails = res.data.registration

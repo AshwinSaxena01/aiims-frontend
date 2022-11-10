@@ -19,6 +19,14 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
+    beforeEnter: (to,from,next) => {
+      console.log(store.getters['site/getUserLoginFlag'], to)
+      if(localStorage.getItem('token')){
+        next({name: 'dashboard'})
+      } else {
+        next()
+      }
+    },
     meta: {
       reqAuth: false
     }

@@ -5,8 +5,10 @@
     <h1>Patient Ticket</h1>
     <span> User name: {{userDetails.name}}</span>
     <span> UHID: {{userDetails.uhid}}</span>
+    <span> Date: {{slotDetails.scheduleDate}}</span>
+    <span> Start time: {{slotDetails.startTime}}</span>
     <h3 class="mb-4"> QR Code </h3>
-  <qrcode-vue v-if="QRValue" :value="QRValue" size="500" level="H" />
+  <qrcode-vue v-if="QRValue" :value="QRValue" size="300" level="H" />
 </div>
 </div>
 </v-container>
@@ -17,6 +19,7 @@ import QrcodeVue from 'qrcode.vue'
 import { mapGetters } from 'vuex';
 import html2pdf from 'html2pdf.js'
 import axios from 'axios'
+import moment from 'moment'
 import { API_URL } from '@/constants';
 export default {
   name: "userTicket",
@@ -28,6 +31,9 @@ export default {
     let url = API_URL + `/register?registrationId=${this.registrationId}`
     await axios.get(url).then((res)=>{
         this.userDetails = res.data.registration
+        this.slotDetails.scheduleDate= moment(res.data.registration.slot.scheduleDate).format('YYYY-MM-DD')
+        this.slotDetails.startTime = moment(res.data.registration.slot.startTime).format('hh:mm A')
+    
     })
     this.QRValue = this.userDetails._id
     setTimeout(this.printTicket(),1000)
@@ -36,7 +42,8 @@ export default {
     return {
         userDetails: [],
         QRValue: '',
-        registrationId: ''
+        registrationId: '',
+        slotDetails: {}
   }
 },
 computed:{
