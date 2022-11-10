@@ -2,8 +2,7 @@
 <div class="text-center">
     <v-container>
     <admin v-if="role ==='superAdmin' || role === 'admin'"></admin>
-    <guard v-if="role === 'guard'"></guard>
-    
+    <guard v-if="role === 'guard'"></guard>  
   </v-container>
   </div>
 </template>

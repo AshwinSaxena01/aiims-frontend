@@ -1,22 +1,23 @@
 <template>
     <div class="bg-gray-50 px-8">
       <p>{{ error }}</p>
-      <button @click="torch=!torch">TURN ON/OFF FLASHLIGHT</button>
       <qrcode-stream v-if="!verified && !showError" @init="onInit" @decode="onDecode" :torch="torch"></qrcode-stream>
-      <v-card v-if="verified" color="green">
-        <v-card-text>
-          <p class="text-h4 text--primary">
-            Verified!
-          </p>
-          <span>Name: {{userDetails.name}}</span>
-          <span>UHID: {{userDetails.name}}</span>
-          <span>Date: {{slotDetails.scheduleDate}}</span>
-          <span>Slot Time: {{slotDetails.startTime}}</span>
+      <v-card v-if="verified" elevation="2" class="mx-auto" tile color="green lighten-1">
+        <v-card-text class="grey--text">
+          <v-icon size="200">mdi-checkbox-marked-circle</v-icon>
+          <span class="text-h6 text--primary">Name: {{userDetails.name}}</span>
+          <span class="text-h6 text--primary">UHID: {{userDetails.name}}</span>
+          <span class="text-h6 text--primary">Date: {{slotDetails.scheduleDate}}</span>
+          <span class="text-h6 text--primary">Slot Time: {{slotDetails.startTime}}</span>
         </v-card-text>
         
       </v-card>
-      
-      <h1 v-if="showError"> Sorry, your slot time is invalid </h1>
+      <v-card v-if="showError" elevation="2" class="mx-auto" tile color="red lighten-1">
+        <v-card-text class="grey--text">
+          <v-icon size="100">mdi-emoticon-sad-outline</v-icon>
+          <span class="text-h7 text--primary">Sorry, your slot time is invalid</span>
+        </v-card-text>
+      </v-card>
     </div>
   </template>
   
@@ -114,6 +115,15 @@ import moment from 'moment'
 .v-card__text{
   display: flex;
   flex-direction: column;
+  margin-top:80px;
+  height: 40vh;
+    justify-content: space-around;
 }
-
+.text-h6 {
+  font-weight: 400;
+  letter-spacing: 0.2rem!important;
+}
+.v-card{
+  min-height: 50vh;
+}
 </style>

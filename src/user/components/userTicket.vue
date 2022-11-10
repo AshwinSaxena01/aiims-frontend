@@ -6,7 +6,7 @@
     <span> User name: {{userDetails.name}}</span>
     <span> UHID: {{userDetails.uhid}}</span>
     <h3 class="mb-4"> QR Code </h3>
-  <qrcode-vue v-if="QRValue" :value="QRValue" size="100" level="H" />
+  <qrcode-vue v-if="QRValue" :value="QRValue" size="500" level="H" />
 </div>
 </div>
 </v-container>
@@ -62,7 +62,6 @@ html2pdf().from(element).set(opt).save();
 </script>
 <style scoped>
 .patient-ticket{
-  width: 400px !important;
   margin:auto;
   border: 1px solid black;
 }

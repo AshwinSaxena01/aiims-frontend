@@ -11,7 +11,7 @@
       :timeout="timeout"
       color="success"
       top
-    > Slot created successfully </v-snackbar>
+    > Department created successfully </v-snackbar>
                   <v-form ref="form">
                     <v-text-field
                     dense

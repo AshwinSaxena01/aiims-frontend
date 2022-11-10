@@ -56,6 +56,7 @@ const BASE_URL = 'http://localhost:4000'
       state.userName = ''
       state.userId = ''
       state.role = null
+      state.token=''
       console.log(state.isLoggedIn)
     }
   },
@@ -67,6 +68,7 @@ const BASE_URL = 'http://localhost:4000'
                         commit('SET_USER_ROLE', res.data.account.role)
                         commit('SET_USER_ID', res.data.account._id)
                         commit('SET_LOGIN_FLAG', true)
+                        commit('SET_TOKEN', res.data.token)
                         localStorage.setItem('token', res.data.token)
                     }).catch((res) => {
                       commit('SET_LOGIN_FLAG', false)
