@@ -11,6 +11,7 @@
       :headers="headers"
       :items="slotsDataWithIndex"
       sort-by="startTime"
+      :sort-desc="true"
       class="elevation-0"
     >
       <template v-slot:top>
