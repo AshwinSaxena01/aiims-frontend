@@ -1,1 +1,1 @@
-export const API_URL = `http://aiims-env.eba-evbs8kks.ap-south-1.elasticbeanstalk.com/signin`
+export const API_URL = `http://aiims-env.eba-evbs8kks.ap-south-1.elasticbeanstalk.com`
