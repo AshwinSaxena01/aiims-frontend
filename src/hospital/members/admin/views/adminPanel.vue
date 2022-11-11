@@ -9,7 +9,7 @@
     <v-card-title class="text-overline blue lighten-5">View Slots :</v-card-title>
     <v-data-table
       :headers="headers"
-      :items="slotsData"
+      :items="slotsDataWithIndex"
       sort-by="startTime"
       class="elevation-0"
     >
@@ -160,7 +160,14 @@ import { API_URL } from '@/constants';
       },
       newStartTime () {
       if( this.editedItem.startTime ) return this.editedItem.startTime + this.$refs.startTimePicker.period
-    }
+    },
+    slotsDataWithIndex () {
+    return this.slotsData.map(
+      (items, index) => ({
+        ...items,
+        index: index + 1
+      }))
+  }
   },
 
     watch: {
