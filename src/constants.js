@@ -1,1 +1,1 @@
-export const API_URL = `http://aiims-env.eba-evbs8kks.ap-south-1.elasticbeanstalk.com`
+export const API_URL = `https://aiims-booking.herokuapp.com`
