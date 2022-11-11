@@ -3,7 +3,7 @@
     <h1 class="text-overline page-heading">Dashboard</h1>
     <v-card elevation="1" class="create-slots grey lighten-5" min-width="344" min-height="200">
       <v-card-title class="text-overline blue lighten-5" >Create Slots :</v-card-title>
-      <create-slot :departmentNames="departmentMenuItems" :departments="departments" ></create-slot>
+      <create-slot :departmentNames="departmentMenuItems" :departments="departments"></create-slot>
     </v-card>
     <v-card elevation="1" class="grey lighten-5">
     <v-card-title class="text-overline blue lighten-5">View Slots :</v-card-title>
@@ -226,7 +226,6 @@ import { API_URL } from '@/constants';
     } )
   },
       editItem (item) {
-        
         this.editing = true
         this.editedIndex = this.slotsData.indexOf(item)
         this.editedItem = Object.assign({}, item)
