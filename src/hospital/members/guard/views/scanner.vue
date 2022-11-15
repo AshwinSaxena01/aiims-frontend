@@ -6,7 +6,7 @@
         <v-card-text class="grey--text">
           <v-icon size="200">mdi-checkbox-marked-circle</v-icon>
           <span class="text-h6 text--primary">Name: {{userDetails.name}}</span>
-          <span class="text-h6 text--primary">UHID: {{userDetails.name}}</span>
+          <span class="text-h6 text--primary">UHID: {{userDetails.uhid}}</span>
           <span class="text-h6 text--primary">Date: {{slotDetails.scheduleDate}}</span>
           <span class="text-h6 text--primary">Slot Time: {{slotDetails.startTime}}</span>
         </v-card-text>
