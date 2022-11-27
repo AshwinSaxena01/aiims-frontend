@@ -1,1 +1,1 @@
-export const API_URL = `https://aiims-booking.herokuapp.com`
+export const API_URL = `https://aiimsbooking.net`
