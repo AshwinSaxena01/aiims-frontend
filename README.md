@@ -1,5 +1,5 @@
 # aiims-frontend
-
+A full stack where admins can create slots and verify them using a QR scanner and users can book those slots and get a ticket with a QR.
 ## Project setup
 ```
 npm install
